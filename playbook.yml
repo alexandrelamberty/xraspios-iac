@@ -1,0 +1,65 @@
+- name: Raspberry Pi Post Install Docker & Portainer
+  hosts: all
+  become: true
+  vars:
+    debug: true
+  tasks:
+    - name: Print all available facts
+      ansible.builtin.debug:
+        var: ansible_facts
+      when: debug==true
+
+    - name: OS Informations
+      debug:
+        msg:
+          - "Architecture: {{ ansible_architecture }}"
+          - "Distribution: {{ ansible_distribution|lower }}"
+          - "Realease: {{ ansible_distribution_release }}"
+          - "Version: {{ ansible_distribution_major_version }}"
+          - "DNS: {{ ansible_dns.nameservers }}"
+
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
+
+    - name: Install Docker
+      apt:
+        name: ["runc", "docker.io", "docker-compose"]
+        allow_unauthenticated: true
+        state: latest
+      become: true
+      become_method: sudo
+
+    - name: Create "docker" group
+      group:
+        name: "docker"
+        state: present
+
+    - name: Add "pi" user to "docker" group
+      user:
+        name: "pi"
+        groups: "docker"
+        append: yes
+
+    # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#ansible-collections-community-docker-docker-container-module
+    - name: Create portainer container
+      docker_container:
+        name: portainer
+        image: portainer/portainer-ce
+        state: started
+        recreate: yes
+        restart_policy: always
+        published_ports:
+          - "8000:8000"
+          - "9000:9000"
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - portainer_data:/data
+
+    - name: Congratulations!
+      debug:
+        msg:
+          - "Your Raspi is ready now!"
