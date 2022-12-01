@@ -4,8 +4,9 @@ Ansible management for my Raspberry Pi
 
 ## Features
 
-- [Docker](https://www.docker.com/)
-- [Portainer](https://www.portainer.io/)
+- [ ] [Docker](https://www.docker.com/)
+- [ ] [Portainer](https://www.portainer.io/)
+- [ ] DNS ?
 
 ## Execute playbook
 
