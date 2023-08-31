@@ -16,8 +16,8 @@
         name: ["runc", "docker.io", "docker-compose"]
         allow_unauthenticated: true
         state: present
-      become: ansible.builtin.sudo
-      become_method: sudo
+      become: true
+      become_method: ansible.builtin.sudo
 
     - name: Create "docker" group
       ansible.builtin.group:
