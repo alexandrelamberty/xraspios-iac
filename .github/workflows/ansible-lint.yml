@@ -1,0 +1,18 @@
+# .github/workflows/ansible-lint.yml
+name: ansible-lint
+on:
+  push:
+    branches:
+      - "master"
+      - "develop/**"
+      - "releases/**"
+      - "features/**"
+  pull_request:
+    branches: ["master", "staging"]
+jobs:
+  build:
+    name: Ansible Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main

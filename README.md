@@ -1,6 +1,6 @@
 # Xraspios Infrastructure as Code
 
-Ansible management for my Raspberry Pi
+Ansible management for my Raspberry Pis.
 
 ## Features
 
