@@ -8,7 +8,6 @@ Ansible management for my Raspberry Pis .
 
 - [ ] [Docker](https://www.docker.com/)
 - [ ] [Portainer](https://www.portainer.io/)
-- [ ] DNS ?
 
 ## Execute playbook
 
