@@ -1,4 +1,4 @@
-- name: Raspberry Pi Post Install Docker & Portainer
+- name: Raspberry Pi Post Install
   hosts: all
   become: true
   vars:
@@ -54,4 +54,4 @@
     - name: Congratulations!
       ansible.builtin.debug:
         msg:
-          - "Your Raspi is ready now!"
+          - "Your Raspberry Pi is ready now!"
