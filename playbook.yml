@@ -4,45 +4,31 @@
   vars:
     debug: true
   tasks:
-    - name: Print all available facts
-      ansible.builtin.debug:
-        var: ansible_facts
-      when: debug==true
-
-    - name: OS Informations
-      debug:
-        msg:
-          - "Architecture: {{ ansible_architecture }}"
-          - "Distribution: {{ ansible_distribution|lower }}"
-          - "Realease: {{ ansible_distribution_release }}"
-          - "Version: {{ ansible_distribution_major_version }}"
-          - "DNS: {{ ansible_dns.nameservers }}"
-
     - name: Update and upgrade apt packages
       become: true
-      apt:
-        upgrade: yes
-        update_cache: yes
+      ansible.builtin.apt:
+        upgrade: true
+        update_cache: true
         cache_valid_time: 86400
 
     - name: Install Docker
-      apt:
+      ansible.builtin.apt:
         name: ["runc", "docker.io", "docker-compose"]
         allow_unauthenticated: true
-        state: latest
+        state: present
       become: true
-      become_method: sudo
+      become_method: ansible.builtin.sudo
 
     - name: Create "docker" group
-      group:
+      ansible.builtin.group:
         name: "docker"
         state: present
 
     - name: Add "pi" user to "docker" group
-      user:
+      ansible.builtin.user:
         name: "pi"
         groups: "docker"
-        append: yes
+        append: true
 
     - name: Install docker-compose from official github repo
       get_url:
@@ -52,11 +38,11 @@
 
     # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#ansible-collections-community-docker-docker-container-module
     - name: Create portainer container
-      docker_container:
+      community.docker.docker_container:
         name: portainer
         image: portainer/portainer-ce
         state: started
-        recreate: yes
+        recreate: true
         restart_policy: always
         published_ports:
           - "8000:8000"
@@ -66,6 +52,6 @@
           - portainer_data:/data
 
     - name: Congratulations!
-      debug:
+      ansible.builtin.debug:
         msg:
           - "Your Raspi is ready now!"
