@@ -30,6 +30,13 @@
         groups: "docker"
         append: true
 
+    - name: Install docker-compose from official github repo
+      ansible.builtin.get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: "u+x,g+x"
+
+    # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#ansible-collections-community-docker-docker-container-module
     - name: Create portainer container
       community.docker.docker_container:
         name: portainer
